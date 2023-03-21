@@ -10,6 +10,8 @@ from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 from models.user import User
+
+
 class DBStorage:
     __engine = None
     __session = None
@@ -19,8 +21,8 @@ class DBStorage:
     def __init__(self):
         self.__engine = create_engine(
             'mysql+mysqldb://{}:{}@{}:3306/{}'.format(
-            environ['HBNB_MYSQL_USER'], environ['HBNB_MYSQL_PWD'],
-            environ['HBNB_MYSQL_HOST'], environ['HBNB_MYSQL_DB']),
+                environ['HBNB_MYSQL_USER'], environ['HBNB_MYSQL_PWD'],
+                environ['HBNB_MYSQL_HOST'], environ['HBNB_MYSQL_DB']),
             pool_pre_ping=True)
         if environ['HBNB_ENV'] == 'test':
             Base.metadata.drop_all(self.__engine)
@@ -31,15 +33,15 @@ class DBStorage:
             results = {}
             for record in self.__session.query(cls).all():
                 key = f"{record.to_dict()['__class__']}.{record.id}"
-                results.update({key:record})
+                results.update({key: record})
             return results
 
         results = {}
         for _class in self.all_classes:
             try:
-                 for record in self.__session.query(_class).all():
-                     key = f"{record.to_dict()['__class__']}.{record.id}"
-                     results.update({key:record})
+                for record in self.__session.query(_class).all():
+                    key = f"{record.to_dict()['__class__']}.{record.id}"
+                    results.update({key: record})
             except sqlalchemy.exc.SQLAlchemyError:
                 continue
         return results
