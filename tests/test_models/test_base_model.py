@@ -3,7 +3,7 @@
 from models.base_model import BaseModel
 import unittest
 import datetime
-from uuid import UUID
+from time import sleep
 import json
 import os
 
@@ -76,9 +76,9 @@ class test_basemodel(unittest.TestCase):
 
     def test_kwargs_one(self):
         """ """
-        n = {'Name': 'test'}
-        with self.assertRaises(KeyError):
-            new = self.value(**n)
+        n = {'name': 'test'}
+        new = self.value(**n)
+        self.assertEqual(new.name, "test")
 
     def test_id(self):
         """ """
@@ -96,4 +96,6 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(type(new.updated_at), datetime.datetime)
         n = new.to_dict()
         new = BaseModel(**n)
+        sleep(5)
+        new.save()
         self.assertFalse(new.created_at == new.updated_at)

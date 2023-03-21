@@ -35,25 +35,17 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-    reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
+    reviews = relationship("Review", backref="place",
+                           cascade="all, delete-orphan")
 
-    amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
-    # else:
-    #     city_id = ""
-    #     user_id = ""
-    #     name = ""
-    #     description = ""
-    #     number_rooms = 0
-    #     number_bathrooms = 0
-    #     max_guest = 0
-    #     price_by_night = 0
-    #     latitude = 0.0
-    #     longitude = 0.0
-    #     amenity_ids = []
+    amenities = relationship("Amenity", secondary=place_amenity,
+                             viewonly=False)
 
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
         def reviews(self):
+            """This mimicks the relationship between places and reviews
+            but for File storage"""
             from models import storage
             from review import Review
             all_reviews = storage.all(Review)
@@ -65,6 +57,8 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
+            """This mimicks the relationship betwen a place and its
+            amenities. It works for FileStorage only"""
             from models import storage
             from amenity import Amenity
             all_perks = storage.all(Amenity)
@@ -76,6 +70,8 @@ class Place(BaseModel, Base):
 
         @amenities.setter
         def amenities(self, value):
+            """For FileStorage, this allws us to append an amenity
+            to a place"""
             from models import storage
             if value['__class__'] == "Amenity":
                 self.amenity_ids.append(value.id)
