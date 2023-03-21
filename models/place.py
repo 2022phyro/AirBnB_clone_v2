@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 
+from os import environ
 from sqlalchemy import Column, String, ForeignKey, \
     Integer, Float
 from sqlalchemy.orm import relationship
@@ -36,7 +37,7 @@ class Place(BaseModel, Base):
     amenity_ids = []
     reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
 
-    # amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
+    amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
     # else:
     #     city_id = ""
     #     user_id = ""
@@ -50,31 +51,32 @@ class Place(BaseModel, Base):
     #     longitude = 0.0
     #     amenity_ids = []
 
-    @property
-    def reviews(self):
-        from models import storage
-        from review import Review
-        all_reviews = storage.all(Review)
-        result = []
-        for k, v in all_reviews.items():
-            if v['place_id'] == self.id:
-                result.append(v)
-        return result
+    if environ['HBNB_TYPE_STORAGE'] != "db":
+        @property
+        def reviews(self):
+            from models import storage
+            from review import Review
+            all_reviews = storage.all(Review)
+            result = []
+            for k, v in all_reviews.items():
+                if v['place_id'] == self.id:
+                    result.append(v)
+            return result
 
-    @property
-    def amenities(self):
-        from models import storage
-        from amenity import Amenity
-        all_perks = storage.all(Amenity)
-        result = []
-        for k, v in all_perks.items():
-            if v['id'] in self.amenity_ids:
-                result.append(v)
-        return result
+        @property
+        def amenities(self):
+            from models import storage
+            from amenity import Amenity
+            all_perks = storage.all(Amenity)
+            result = []
+            for k, v in all_perks.items():
+                if v['id'] in self.amenity_ids:
+                    result.append(v)
+            return result
 
-    @amenities.setter
-    def amenities(self, value):
-        from models import storage
-        if value['__class__'] == "Amenity":
-            self.amenity_ids.append(value.id)
-            storage.save()
+        @amenities.setter
+        def amenities(self, value):
+            from models import storage
+            if value['__class__'] == "Amenity":
+                self.amenity_ids.append(value.id)
+                storage.save()
