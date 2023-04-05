@@ -3,14 +3,18 @@
 from the contents of AirBnB_Clone using do_pack"""
 #from fabric import Connection
 import datetime
-from fabric.api import run
+from fabric.api import local
+import os
+
 
 def do_pack():
+    """ This uses fabric to create a tar file"""
     date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    name = f"versions/web_static_{date}.tgz"
-    command = f"tar -cvzf {name} web_static"
-    try:
-        run(command)
-        return name
-    except:
+    name = "versions/web_static_{}.tgz".format(date)
+    command = "tar -cvzf {} web_static".format(name)
+    if not os.path.isdir("versions"):
+        res = local('mkdir versions')
+    res = local(command)
+    if res.failed:
         return None
+    return name
