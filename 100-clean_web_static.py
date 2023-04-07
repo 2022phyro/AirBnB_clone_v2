@@ -4,10 +4,11 @@ from the contents of AirBnB_Clone using do_pack"""
 from fabric.api import put, run, env, local
 import datetime
 import os
-
+from fabric.decorators import runs_once
 
 
 env.hosts = ['3.84.238.62', '100.25.17.233']
+@runs_once
 def do_pack():
     """ This uses fabric to create a tar file"""
     date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -40,6 +41,15 @@ def do_deploy(archive_path):
     except Exception:
         return False
 
+def deploy():
+    """This function calls do_pack and do_deploy
+    do_pack creates a snapshot while do_deploy then
+    deploys that snapshot to the whole servers"""
+    name = do_pack()
+    if name is None:
+        return False
+    val = do_deploy(name)
+    return val
 
-
+def do_clean():
 
