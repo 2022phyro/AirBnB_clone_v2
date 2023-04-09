@@ -39,7 +39,7 @@ exec {'Grant permissions':
   before   => Exec['Edit config file'],
 }
 exec {'Edit config file':
-  command  => "sudo sed -i '/# pass PHP scripts to FastCGI server/i \\tlocation \/hbnb_static \{\n\t\talias \/data\/web_static\/current\/;\n\t\}\n' /etc/nginx/sites-available/default",
+  command  => 'sudo sed -i "s/# pass PHP scripts to FastCGI server/location \/hbnb_static \{\n\t\talias \/data\/web_static\/current\/;\n\t\}\n\t# pass PHP scripts to FastCGI server/" /etc/nginx/sites-available/default',
   provider => shell,
   before   => Exec['restart server'],
 }
