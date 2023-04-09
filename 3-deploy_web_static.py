@@ -8,6 +8,8 @@ from fabric.decorators import runs_once
 
 
 env.hosts = ['3.84.238.62', '100.25.17.233']
+
+
 @runs_once
 def do_pack():
     """ This uses fabric to create a tar file"""
@@ -20,6 +22,7 @@ def do_pack():
     if res.failed:
         return None
     return name
+
 
 def do_deploy(archive_path):
     """ This uses fabric to deploy a tar file to the server"""
@@ -40,6 +43,7 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
+
 
 def deploy():
     """This function calls do_pack and do_deploy

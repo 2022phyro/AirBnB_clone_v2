@@ -8,6 +8,8 @@ from fabric.decorators import runs_once
 
 
 env.hosts = ['100.25.17.233', '3.84.238.62']
+
+
 @runs_once
 def do_pack():
     """ This uses fabric to create a tar file"""
@@ -20,6 +22,7 @@ def do_pack():
     if res.failed:
         return None
     return name
+
 
 def do_deploy(archive_path):
     """ This uses fabric to deploy a tar file to the server"""
@@ -41,6 +44,7 @@ def do_deploy(archive_path):
     except Exception:
         return False
 
+
 def deploy():
     """This function calls do_pack and do_deploy
     do_pack creates a snapshot while do_deploy then
@@ -51,10 +55,13 @@ def deploy():
     val = do_deploy(name)
     return val
 
+
 @runs_once
 def clean_versions(list_):
-     [os.remove("versions/{}".format(fil)) for fil in list_]
-     return list_
+    """This function delets contents from the versions folder"""
+    [os.remove("versions/{}".format(fil)) for fil in list_]
+    return list_
+
 
 def do_clean(number=0):
     """This leaves only the most recent versions"""
@@ -72,7 +79,6 @@ def do_clean(number=0):
             y.remove(max(y))
     to_delete = [val for val in x if int(val.strip("web_static_.tgz")) in y]
     final = clean_versions(to_delete)
-    #va = run('ls -1 /data/web_static/releases/').split("\n")
     for val in final:
         dir_name = val.strip(".tgz")
         run("sudo rm -r /data/web_static/releases/{}".format(dir_name))
