@@ -27,6 +27,14 @@ exec {'create test file':
 exec {'create new symlink':
   command  => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
   provider => shell,
+<<<<<<< HEAD
+=======
+  before   => Exec['Grant permissions'],
+}
+exec {'Grant permissions':
+  command  => 'sudo chown -R ubuntu /data/ ; sudo chgrp -R ubuntu /data/',
+  provider => shell,
+>>>>>>> parent of 2a75888... Added file rule to make sure the file is given the right permissions
   before   => Exec['Edit config file'],
 }
 exec {'Edit config file':
