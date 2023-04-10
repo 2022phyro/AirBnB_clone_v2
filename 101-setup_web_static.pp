@@ -15,12 +15,12 @@ exec {'create test directory':
   before   => Exec['create shared directory'],
 }
 exec {'create shared directory':
-  command  => 'sudo mkdir -p /data/web_static/shared/',
+  command  => sudo mkdir -p /data/web_static/shared/',
   provider => shell,
   before   => Exec['create test file'],
 }
 exec {'create test file':
-  command  => 'echo "Hello Madness" | sudo tee /data/web_static/releases/test/index.html',
+  command  => 'echo 'Hello Madness' | sudo tee /data/web_static/releases/test/index.html',
   provider => shell,
   before   => Exec['create new symlink'],
 }
