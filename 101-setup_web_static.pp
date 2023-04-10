@@ -32,11 +32,13 @@ exec {'delete old symlink':
 exec {'create new symlink':
   command  => 'sudo ln -s /data/web_static/releases/test/ /data/web_static/current',
   provider => shell,
-  before   => Exec['Grant permissions'],
+  before   => File['/data/'],
 }
-exec {'Grant permissions':
-  command  => 'sudo chown -R ubuntu /data/ ; sudo chgrp -R ubuntu /data/',
-  provider => shell,
+file {'/data/':
+  ensure   => directory,
+  owner    => 'ubuntu',
+  group    => 'ubuntu',
+  recurse  => true,
   before   => Exec['Edit config file'],
 }
 exec {'Edit config file':
