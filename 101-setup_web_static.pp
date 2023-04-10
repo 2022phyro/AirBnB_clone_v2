@@ -30,7 +30,7 @@ exec {'create new symlink':
   before   => Exec['Edit config file'],
 }
 exec {'Edit config file':
-  command  => 'sudo sed -i \'38i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t\tautoindex off;\n\t}\n\' /etc/nginx/sites-available/default',
+  command  => "sudo sed -i \'38i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t\tautoindex off;\n\t}\n\' /etc/nginx/sites-available/default",
   provider => shell,
   before   => Exec['restart server'],
 }
