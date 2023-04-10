@@ -32,6 +32,13 @@ exec {'delete old symlink':
 exec {'create new symlink':
   command  => 'sudo ln -s /data/web_static/releases/test/ /data/web_static/current',
   provider => shell,
+  before   => File['/data/'],
+}
+file {'/data/':
+  ensure   => directory,
+  owner    => 'ubuntu',
+  group    => 'ubuntu',
+  recurse  => true,
   before   => Exec['Edit config file'],
 }
 exec {'Edit config file':
@@ -42,14 +49,5 @@ exec {'Edit config file':
 exec {'restart server':
   command  => 'sudo service nginx restart',
   provider => shell,
-  before   => File['/data/'],
+
 }
-file {'/data/':
-  ensure   => directory,
-  owner    => 'ubuntu',
-  group    => 'ubuntu',
-  recurse  => true,
-}
-
-
-
