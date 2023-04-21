@@ -16,7 +16,7 @@ class State(BaseModel, Base):
     def cities(self):
         """This is a getter attribut that allows us to
         get all the cities associated with a particular place"""
-        from city import City
+        from models.city import City
         from models import storage
         all_cities = storage.all(City)
         result = []

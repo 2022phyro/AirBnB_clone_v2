@@ -5,6 +5,7 @@ from os import environ
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, DateTime
+from os import environ
 
 Base = declarative_base()
 
@@ -46,8 +47,9 @@ class BaseModel:
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
-        self.updated_at = datetime.now()
+        self.__dict__['updated_at'] = datetime.now()
         storage.new(self)
+        print(self.updated_at)
         storage.save()
 
     def to_dict(self):
