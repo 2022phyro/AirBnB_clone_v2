@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This module creates a minimaalist flask app"""
+"""This module creates a minimalist flask app"""
 from flask import Flask
 
 app = Flask(__name__)
@@ -12,9 +12,9 @@ def hello():
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hello():
+def call_hbnb():
     """This returns HBNB"""
-    return "HBNB!"
+    return "HBNB"
 
 
 if __name__ == "__main__":
