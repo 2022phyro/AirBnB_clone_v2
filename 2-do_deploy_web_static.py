@@ -6,8 +6,9 @@ import datetime
 import os
 
 
-
 env.hosts = ['3.84.238.62', '100.25.17.233']
+
+
 def do_pack():
     """ This uses fabric to create a tar file"""
     date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -19,6 +20,7 @@ def do_pack():
     if res.failed:
         return None
     return name
+
 
 def do_deploy(archive_path):
     """ This uses fabric to deploy a tar file to the server"""
@@ -39,7 +41,3 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
-
-
-
-
