@@ -9,11 +9,19 @@ app = Flask(__name__)
 
 @app.route('/states_list', strict_slashes=False)
 def all_states():
+    """Returns all states"""
     states = []
     for state in storage.all(State).values():
         # print(state)
         states.append(state.to_dict())
+    states.sort(key=lambda x: x['name'])
     return render_template('7-states_list.html', states=states)
+
+
+@app.teardown_appcontext
+def end_session(exception=None):
+    """Ends the app"""
+    storage.close()
 
 
 if __name__ == "__main__":
