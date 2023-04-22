@@ -28,20 +28,19 @@ class DBStorage:
         """This instantiates the database
         and creates our engine"""
         self.__engine = create_engine(
-            'mysql+mysqldb://{}:{}@{}:3306/{}'.format(
-                environ['HBNB_MYSQL_USER'], environ['HBNB_MYSQL_PWD'],
-                environ['HBNB_MYSQL_HOST'], environ['HBNB_MYSQL_DB']),
-            pool_pre_ping=True)
+                 'mysql+mysqldb://{}:{}@{}:3306/{}'.format(
+                        environ['HBNB_MYSQL_USER'], environ['HBNB_MYSQL_PWD'],
+                        environ['HBNB_MYSQL_HOST'], environ['HBNB_MYSQL_DB']),
+                 pool_pre_ping=True)
         if environ['HBNB_ENV'] == 'test':
             Base.metadata.drop_all(self.__engine)
-            pass
 
     def all(self, cls=None):
         """This returns all items in the database"""
         if cls:
             results = {}
             for record in self.__session.query(cls).all():
-                key = f"{record.to_dict()['__class__']}.{record.id}"
+                key = "{}.{}".format(record.to_dict()['__class__'], record.id)
                 results.update({key: record})
             return results
 
@@ -49,7 +48,7 @@ class DBStorage:
         for _class in self.all_classes:
             try:
                 for record in self.__session.query(_class).all():
-                    key = f"{record.to_dict()['__class__']}.{record.id}"
+                    key = "{}.{}".format(record.to_dict()['__class__'], record.id)
                     results.update({key: record})
             except sqlalchemy.exc.SQLAlchemyError:
                 continue
