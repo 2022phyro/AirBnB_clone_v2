@@ -11,8 +11,6 @@ Objects creations
 """
 state_1 = State(name="California")
 print("New state: {}".format(state_1))
-print(state_1.__dict__)
-print(storage.__class__.__name__)
 state_1.save()
 state_2 = State(name="Arizona")
 print("New state: {}".format(state_2))

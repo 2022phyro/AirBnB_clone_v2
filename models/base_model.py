@@ -36,12 +36,9 @@ class BaseModel:
 
     def __str__(self):
         """Returns a string representation of the instance"""
-        cls = (str(type(self)).split('.')[-1]).split('\'')[0]
+        cls = str(type(self).__name__)
         _dict = self.__dict__.copy()
-        try:
-            del _dict['_sa_instance_state']
-        except KeyError:
-            pass
+        _dict.pop('_sa_instance_state', None)
         return '[{}] ({}) {}'.format(cls, self.id, _dict)
 
     def save(self):
@@ -53,16 +50,12 @@ class BaseModel:
 
     def to_dict(self):
         """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(self.__dict__.copy())
+        dictionary = self.__dict__.copy()
         dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+                          str(type(self).__name__)})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        try:
-            del dictionary['_sa_instance_state']
-        except KeyError:
-            pass
+        dictionary.pop('_sa_instance_state', None)
         return dictionary
 
     def delete(self):
