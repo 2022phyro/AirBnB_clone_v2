@@ -2,7 +2,7 @@
 """This is the db_storage module. It contains our
 DbStorage class which is necessary for handling files
 in our databse"""
-from os import environ
+from os import environ, getenv
 import sqlalchemy.exc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -32,7 +32,7 @@ class DBStorage:
                         environ['HBNB_MYSQL_USER'], environ['HBNB_MYSQL_PWD'],
                         environ['HBNB_MYSQL_HOST'], environ['HBNB_MYSQL_DB']),
                  pool_pre_ping=True)
-        if environ['HBNB_ENV'] == 'test':
+        if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
