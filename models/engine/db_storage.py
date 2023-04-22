@@ -5,7 +5,7 @@ in our databse"""
 from os import environ
 import sqlalchemy.exc
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.city import City
 from models.state import State
@@ -74,7 +74,8 @@ class DBStorage:
     def reload(self):
         """This recreates/sbegins an asql session"""
         Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_fac = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(session_fac)
         self.__session = Session()
 
     def close(self):
