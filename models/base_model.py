@@ -62,4 +62,3 @@ class BaseModel:
         """This method deletes this particular instance"""
         from models import storage
         storage.delete(self)
-

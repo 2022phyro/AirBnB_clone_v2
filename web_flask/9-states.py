@@ -14,16 +14,18 @@ def all_states():
     for state in storage.all(State).values():
         states.append(state)
     states.sort(key=lambda x: x.name)
-    return render_template('9-states.html', states=states)
+    return render_template("9-states.html", states=states)
 
-@app.route('/states<id>', strict_slashes=False)
+
+@app.route('/states/<id>', strict_slashes=False)
 def curr_state(id):
     key = "State.{}".format(id)
-    if key  in storage.all(State).keys():
+    if key in storage.all(State).keys():
         curr = storage.all(State)[key]
-    return render_template('9-states.html', curr=curr)
+        return render_template('9-states.html', curr=curr)
     else:
-        return render_template('9-states.html', curr=None)
+        return render_template('9-states.html')
+
 
 @app.teardown_appcontext
 def end_session(exception=None):
