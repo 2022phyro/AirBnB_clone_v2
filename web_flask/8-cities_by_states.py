@@ -12,9 +12,8 @@ def all_states():
     """Returns all states"""
     states = []
     for state in storage.all(State).values():
-        # print(state)
-        states.append(state.to_dict())
-    states.sort(key=lambda x: x['name'])
+        states.append(state)
+    states.sort(key=lambda x: x.name)
     return render_template('8-cities_by_states.html', states=states)
 
 
